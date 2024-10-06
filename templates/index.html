@@ -1,88 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-background-black-ter">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doubtnut</title>
+    <title>doubtnutX - Video Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <style>
         body {
-            background-color: #f4f4f4;
-            color: #222;
-            font-family: monospace;
-            margin: 0;
-            padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
+            flex-direction: column;
         }
-        .container {
-            max-width: 800px;
-            width: 100%;
-            padding: 20px;
-            background-color: #fff;
-            border: 2px solid #000;
-            box-sizing: border-box;
-        }
-        h1, h2, label {
-            font-weight: 700;
-            text-align: center;
-        }
-        input[type="text"], button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
-            border: 2px solid #000;
-        }
-        button {
-            background-color: transparent;
-            color: #000;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        button:hover {
-            background-color: #000;
-            color: #fff;
+        .wrapper {
+            flex: 1;
         }
         .video-container {
             position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
-            margin-top: 20px;
+            padding-bottom: 56.25%;
+            height: 0;
             overflow: hidden;
+            max-width: 100%;
         }
-        iframe {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: 2px solid #000;
         }
+        .search-box {
+            background-color: #2b2b2b;
+            border: 1px solid #4a4a4a;
+            color: #fff;
+        }
+        .search-box::placeholder {
+            color: #888;
+        }
+        
+        .result-box {
+            background-color: #2b2b2b;
+            border: 1px solid #4a4a4a;
+            transition: all 0.3s ease;
+        }
+        .result-box:hover {
+            box-shadow: 0 0 15px rgba(50, 115, 220, 0.5);
+        }
+        
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1 class="text-4xl mb-6">Video Solution</h1>
-        
-        <form method="POST" class="space-y-4">
-            <label for="url" class="block text-lg">Enter the full Doubtnut URL:</label>
-            <input type="text" id="url" name="url" required class="px-3 py-2">
-            
-            <button type="submit" class="py-2 px-4">
-                Get Video Link
-            </button>
-        </form>
+<body class="has-background-black-ter has-text-light">
+    <div class="wrapper">
 
-        <!-- Display iframe only if a video_url is provided -->
-        {% if video_url %}
-            <div class="video-container">
-                <iframe src="{{ video_url }}" frameborder="0" allowfullscreen></iframe>
+        <section class="section">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-half">
+                        <h2 class="title has-text-centered has-text-light mb-18">DOUBTNUT-X</h2>
+                        <h4 class="subtitle has-text-centered has-text-light mb-18">Free access to premium videos.</h4>
+
+                        <h6 class="subtitle has-text-centered has-text-light mb-18">Hi Allen, if you want to sue me, contact <a href="https://social.mtdv.me/articles/legal2024">here</a> first. I've 0 bank balance anyway. Alternatively, you can fix your API architecture.</h6>
+                        <form method="POST">
+                            <div class="field has-addons">
+                                <div class="control is-expanded">
+                                    <input class="input is-medium search-box" type="text" id="url" name="url" placeholder="Enter a doubtnutX URL or search query" required>
+                                </div>
+                                <div class="control">
+                                    <button type="submit" class="button is-primary is-medium">
+                    
+                                        <span>Search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {% if video_url %}
+                    <div class="box has-background-grey-darker mt-5">
+                        <h3 class="title is-5 has-text-light">Watch Now</h3>
+                        <div class="video-container">
+                            <iframe src="{{ video_url }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if search_results %}
+                    <div class="mt-6">
+                        <h3 class="title is-5 has-text-light has-text-centered mb-5">Search Results</h3>
+                        <div class="columns is-multiline">
+                            {% for result in search_results %}
+                                <div class="column is-one-third-desktop is-half-tablet">
+                                    <div class="box result-box">
+                                        <a href="{{ result.link }}" class="has-text-primary is-size-5">LINK {{ loop.index }}</a>
+                                        {% if result.video_url %}
+                                            <div class="video-container mt-3">
+                                                <iframe src="{{ result.video_url }}" frameborder="0" allowfullscreen></iframe>
+                                            </div>
+                                        {% else %}
+                                            <p class="mt-2 has-text-grey-light">No video available</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+        </section>
     </div>
 </body>
 </html>

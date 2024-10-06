@@ -1,3 +1,4 @@
+googlesearch-python
 Flask
 Gunicorn
 requests
